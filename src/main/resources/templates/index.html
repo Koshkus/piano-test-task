@@ -1,0 +1,33 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{css/main.css}"/>
+</head>
+<body>
+<form th:action="@{/search}" th:object="${string}" method="get">
+    <div>Search string:
+        <input type="text" name="string">
+        <input type="submit" value="search!">
+    </div>
+</form>
+<div th:if="${not #lists.isEmpty(items)}">
+    <table class="result">
+        <thead>
+        <tr>
+            <th>date</th>
+            <th>title</th>
+            <th>author</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${items}">
+            <td th:text="${item.creationDate}"></td>
+            <td><a th:text="${item.title}" th:href="${item.link}"></a><img th:if="${item.answered}" class="checkmark"
+                                                                           th:src="@{images/checkmark.png}"></td>
+            <td th:text="${item.owner.displayName}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
