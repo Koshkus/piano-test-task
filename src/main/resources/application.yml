@@ -1,0 +1,3 @@
+api:
+  url: http://api.stackexchange.com/2.2/search?site=stackoverflow
+  filter: "!*MGgl*rBPKwOsHRS" #https://api.stackexchange.com/docs/create-filter#include=.total&base=default&unsafe=false&filter=default&run=true

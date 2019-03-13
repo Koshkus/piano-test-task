@@ -8,8 +8,12 @@
     <div>Search string:
         <input type="text" name="string">
         <input type="submit" value="search!">
+        <span class="error" th:text="${error}"></span>
     </div>
 </form>
+<div th:if="${total != null}">
+    Total: <span th:text="${total}"></span>
+</div>
 <div th:if="${not #lists.isEmpty(items)}">
     <table class="result">
         <thead>
@@ -28,6 +32,11 @@
         </tr>
         </tbody>
     </table>
+    <span th:if="${not #lists.isEmpty(pages)}" th:each="page : ${pages}">
+        <a th:href="@{/search(string=${param.string}, page=${page})}"
+           th:text=${page}
+           th:class="active"></a>
+    </span>
 </div>
 </body>
 </html>

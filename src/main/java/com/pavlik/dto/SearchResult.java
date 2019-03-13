@@ -10,4 +10,5 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class SearchResult {
     private List<Question> items;
+    private int total;
 }
