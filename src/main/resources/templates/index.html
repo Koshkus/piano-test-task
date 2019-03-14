@@ -4,9 +4,10 @@
     <link rel="stylesheet" type="text/css" media="all" th:href="@{css/main.css}"/>
 </head>
 <body>
-<form th:action="@{/search}" th:object="${string}" method="get">
+<form th:action="@{/search}" method="get">
     <div>Search string:
         <input type="text" name="string">
+        <input type="hidden" name="page" value="1">
         <input type="submit" value="search!">
         <span class="error" th:text="${error}"></span>
     </div>
@@ -32,11 +33,15 @@
         </tr>
         </tbody>
     </table>
-    <span th:if="${not #lists.isEmpty(pages)}" th:each="page : ${pages}">
-        <a th:href="@{/search(string=${param.string}, page=${page})}"
-           th:text=${page}
-           th:class="active"></a>
-    </span>
+    <div th:with="curPage=${#conversions.convert(param.page, 'java.lang.Integer')}">
+        <a th:if="${curPage > 1}" th:href="@{/search(string=${param.string}, page=1)}">First</a>
+        <span th:if="${not #lists.isEmpty(pages)}" th:each="page : ${pages}">
+            <a th:href="@{/search(string=${param.string}, page=${page})}"
+               th:text=${page}
+               th:class="${page==curPage} ? disabled"></a>
+        </span>
+        <a th:if="${curPage < maxPage}" th:href="@{/search(string=${param.string}, page=${maxPage})}">Last</a>
+    </div>
 </div>
 </body>
 </html>

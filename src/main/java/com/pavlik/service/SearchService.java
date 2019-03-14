@@ -1,7 +1,7 @@
 package com.pavlik.service;
 
 import com.pavlik.dto.SearchResult;
-import com.pavlik.exception.EmptySearchStringException;
+import com.pavlik.exception.SearchException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,8 +25,9 @@ public class SearchService {
 
     public SearchResult searchString(String stringToSearch, int page) {
         if (StringUtils.isEmpty(stringToSearch.trim())) {
-            log.error("String to search is empty");
-            throw new EmptySearchStringException();
+            String message = "String to search is empty";
+            log.error(message);
+            throw new SearchException(message);
         }
 
         String uri = UriComponentsBuilder.fromHttpUrl(apiString)
@@ -35,9 +36,14 @@ public class SearchService {
                 .queryParam("intitle", stringToSearch)
                 .build().toUriString();
 
-        log.debug("Requesting api to search string - {}", stringToSearch);
+        log.debug("Requesting api to search title contains string - {}", stringToSearch);
         ResponseEntity<SearchResult> entity = restTemplate.getForEntity(uri, SearchResult.class);
-
-        return entity.getBody();
+        SearchResult result = entity.getBody();
+        if (result.getItems().isEmpty() && result.getTotal() > 0) {
+            String message = "Requested page is not found";
+            log.error(message);
+            throw new SearchException(message);
+        }
+        return result;
     }
 }

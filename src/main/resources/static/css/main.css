@@ -11,3 +11,9 @@ table, th, td {
 .error {
     color: red;
 }
+
+.disabled {
+    text-decoration: none;
+    color: currentColor;
+    pointer-events: none;
+}
